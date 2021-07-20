@@ -22,11 +22,12 @@ using namespace cli;
 
 int main(int argc, char* argv[]) {
     unsigned data[14400];
-    std::string ip = "172.16.17.94";
+    std::string ip = "172.16.17.103";
     if(argc == 2) 
         ip = argv[1];
 
-    InitCommunication(ip.c_str(), 32000, 32001, true);
+    if(InitCommunication(ip.c_str(), 32000, 32001, false) < 0)
+        return -1;
 
 
         /*AcqInfo info{10,10,10,true,true,false};
@@ -170,6 +171,23 @@ int main(int argc, char* argv[]) {
             "Print internal IRQs counter"
     );
 
+    rootMenu -> Insert(
+            "close", [&](std::ostream& out) {
+                CloseCommunication();
+                out << "Close executed\n";
+            },
+            "Close"
+    );
+
+    rootMenu -> Insert(
+            "init", [&](std::ostream& out) {
+                if(InitCommunication(ip.c_str(), 32000, 32001, true) < 0)
+                    out << "Init error\n";
+                out << "Init executed\n";
+            },
+            "Init"
+    );
+
 
     Cli cli(std::move(rootMenu));
     CliFileSession input(cli);
@@ -178,3 +196,4 @@ int main(int argc, char* argv[]) {
 
     CloseCommunication();
 }
+    
