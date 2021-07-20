@@ -77,7 +77,7 @@ void DataReceiver::readerThread() {
             if(old_pnum.has_value() && uint16_t(number - 1) != old_pnum) {
                 logger->warn(
                     "Packets lost. Last seen packet={}, current packet={}",
-                    old_pnum.value(), uint16_t(number - 1));
+                    old_pnum.value(), uint16_t(number));
             }
             old_pnum = number;
 
