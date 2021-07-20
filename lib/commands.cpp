@@ -206,4 +206,6 @@ unsigned GetDataIRQs::getAnswer() {
     return m.body["answer"]["val"];
 }
 
+UpdateHB::UpdateHB() : Command("update_hb") {}
+
 } // end namespace CMD

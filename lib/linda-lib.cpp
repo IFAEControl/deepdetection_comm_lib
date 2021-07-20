@@ -338,6 +338,15 @@ int LoadFloodNormFactors(const unsigned in[60], int chips_bitmap) {
 #endif
 }
 
+int UpdateHB() {
+#ifdef DUMMY
+    return 0;
+#else
+    CMD::UpdateHB cmd;
+    return sendCmd(cmd).first;
+#endif
+}
+
 // Debugging functions
 
 void PrintAllRegs() {

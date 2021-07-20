@@ -15,13 +15,13 @@ public:
     UnsignedArray(const unsigned* in) {
         for(std::size_t i = 0; i < S; i++) a[i] = in[i];
     }
-    
+
     template<typename T>
     UnsignedArray(T& j) {
         a = j;
     }
 
-    auto val() { return a; } 
+    auto val() { return a; }
 
     auto begin() { return a.begin(); }
     auto end() { return a.end(); }
@@ -157,6 +157,11 @@ class GetDataIRQs : public Command {
 public:
     GetDataIRQs();
     unsigned getAnswer();
+};
+
+class UpdateHB : public Command {
+public:
+	UpdateHB();
 };
 
 } // end namespace CMD
