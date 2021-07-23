@@ -1,8 +1,8 @@
 #include <cstring>
 #include <iostream>
 #include <memory>
-#include <optional>
 #include <mutex>
+#include <optional>
 #include <sstream>
 
 #include <Poco/Net/SocketStream.h>
@@ -66,9 +66,15 @@ void DataReceiver::readerThread() {
 
             BaseHeaderType header;
             memcpy(&header, buf, sizeof(header));
+
+            auto bytes = header.packetsize;
             if(header.packtype == HEADER_PACKTYPE::ERROR) {
                 _timeouts++;
-                logger->error("Error on asyncs");
+
+                char str[bytes + 1];
+                memcpy(str, buf + HEADER_BYTE_SIZE, bytes);
+                str[bytes] = '\0';
+                logger->error("Error on asyncs: {}", static_cast<char*>(str));
 
                 // Remove buffered data
                 _dgs.close();
@@ -85,7 +91,6 @@ void DataReceiver::readerThread() {
             }
             old_pnum = number;
 
-            auto bytes = header.packetsize;
             Frame f(bytes);
             memcpy(f.get(), buf + sizeof(header), bytes);
 
