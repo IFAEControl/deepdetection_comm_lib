@@ -180,6 +180,15 @@ int main(int argc, char* argv[]) {
     );
 
     rootMenu -> Insert(
+            "send_hb", [&](std::ostream& out) {
+                UpdateHB();
+                out << "Heart beat sent\n";
+            },
+            "Send heart beat"
+    );
+
+
+    rootMenu -> Insert(
             "init", [&](std::ostream& out) {
                 if(InitCommunication(ip.c_str(), 32000, 32001, true) < 0)
                     out << "Init error\n";
