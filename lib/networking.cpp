@@ -2,6 +2,7 @@
 #include <iostream>
 #include <memory>
 #include <optional>
+#include <mutex>
 #include <sstream>
 
 #include <Poco/Net/SocketStream.h>
@@ -17,10 +18,13 @@ using namespace CMD;
 
 FrameBuffer fb;
 
+std::mutex cmd_mutex;
+
 CmdSender::CmdSender(const std::string& ip, unsigned short p) : _sa{ip, p} {}
 
 template <typename T> T CmdSender::sendCommand(T&& c) {
     auto& m = c.getMessage();
+    std::lock_guard<std::mutex> lock(cmd_mutex);
     _socket.connect(_sa);
     _socket.sendBytes(&m.header, HEADER_BYTE_SIZE);
     Poco::Net::SocketStream str(_socket);
