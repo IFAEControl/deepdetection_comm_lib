@@ -38,6 +38,7 @@ template <typename T> T CmdSender::sendCommand(T&& c) {
         throw std::runtime_error("Command error");
     }
     m.body = json::parse(ss.seekg(HEADER_BYTE_SIZE));
+    logger->debug("Received json: \'{}\'", m.body.dump());
     _socket.close();
     return std::move(c);
 }
