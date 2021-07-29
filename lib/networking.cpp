@@ -151,8 +151,8 @@ void DataReceiver::resetTimeouts() {
     _timeouts = 0;
 }
 
-std::string& DataReceiver::getLastError() {
-    return _last_error_msg;
+const char* DataReceiver::getLastError() {
+    return _last_error_msg.c_str();
 }
 
 int Networking::initialize(std::string ip, unsigned short port, unsigned short aport) {
@@ -187,7 +187,7 @@ void Networking::resetTimeoutsCounter() {
     _data_receiver.resetTimeouts();
 }
 
-std::string& Networking::getLastError() {
+const char* Networking::getLastError() {
     return _data_receiver.getLastError();
 }
 

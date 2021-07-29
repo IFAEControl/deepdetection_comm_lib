@@ -35,7 +35,7 @@ public:
 	unsigned getTimeouts() const;
 	void resetTimeouts();
 
-	std::string& getLastError();
+	const char* getLastError();
 
 private:
 	void readerThread();
@@ -59,7 +59,7 @@ public:
 	void joinThread();
 	unsigned getTimeoutsCounter() const;
 	void resetTimeoutsCounter();
-	std::string& getLastError();
+	const char* getLastError();
 private:
 	std::string _ip{"8.8.8.8"};
 	CmdSender _cmd_sender;
