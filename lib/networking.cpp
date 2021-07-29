@@ -32,6 +32,7 @@ CmdSender::CmdSender(const std::string& ip, unsigned short p) : _sa{ip, p} {}
 template <typename T> T CmdSender::sendCommand(T&& c) {
     auto& m = c.getMessage();
     std::lock_guard<std::mutex> lock(cmd_mutex);
+    logger->debug("Sending data: {}", m.body.dump());
     _socket.connect(_sa);
     _socket.sendBytes(&m.header, HEADER_BYTE_SIZE);
     Poco::Net::SocketStream str(_socket);
@@ -44,8 +45,6 @@ template <typename T> T CmdSender::sendCommand(T&& c) {
         _socket.close();
         throw std::runtime_error("Command error");
     }
-    m.body = json::parse(ss.seekg(HEADER_BYTE_SIZE));
-    logger->debug("Received json: \'{}\'", m.body.dump());
     _socket.close();
     return std::move(c);
 }
