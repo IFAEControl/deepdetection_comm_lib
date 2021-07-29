@@ -389,7 +389,7 @@ void ResetTimeoutsCounter() {
 }
 
 const char* GetLastError() {
-    return n.getLastError().c_str();
+    return n.getLastError();
 }
 
 unsigned GetWriteIdx() {
