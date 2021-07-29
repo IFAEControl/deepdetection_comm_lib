@@ -83,7 +83,7 @@ void DataReceiver::readerThread() {
                 memcpy(str, buf + HEADER_BYTE_SIZE, bytes);
                 str[bytes] = '\0';
                 _last_error_msg = str;
-                delete str;
+                delete[] str;
                 logger->error("Error on asyncs: {}", static_cast<char*>(str));
 
                 // Remove buffered data
