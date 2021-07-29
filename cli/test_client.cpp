@@ -199,7 +199,7 @@ int main(int argc, char* argv[]) {
 
 	rootMenu -> Insert(
 		"get_last_err", [&](std::ostream& out) {
-			out << GetLastError() << "\n";
+			out << GetLastErrorStr() << "\n";
 		},
 		"Get last error"
 	);

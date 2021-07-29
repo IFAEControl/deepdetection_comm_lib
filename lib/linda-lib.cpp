@@ -388,7 +388,7 @@ void ResetTimeoutsCounter() {
     n.resetTimeoutsCounter();
 }
 
-const char* GetLastError() {
+const char* GetLastErrorStr() {
     return n.getLastError();
 }
 

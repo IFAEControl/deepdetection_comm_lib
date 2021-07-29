@@ -22,7 +22,7 @@ add_library(${PROJECT_NAME} SHARED ${ALL_FILES})
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}-temp ${CONAN_LIBS})
 
 if(NOT MSVC)
-	target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Werror -Wcast-qual -Wunreachable-code -Wfatal-errors)
+	target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Werror -Wcast-qual -Wunreachable-code -Wfatal-errors -pedantic)
 endif()
 
 if(COMPILE_TESTS)
