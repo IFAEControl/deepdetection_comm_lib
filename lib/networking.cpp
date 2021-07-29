@@ -45,6 +45,7 @@ template <typename T> T CmdSender::sendCommand(T&& c) {
         _socket.close();
         throw std::runtime_error("Command error");
     }
+    m.body = json::parse(ss.seekg(HEADER_BYTE_SIZE));
     _socket.close();
     return std::move(c);
 }
