@@ -52,6 +52,7 @@ DllExport unsigned GetElemCounter();
 DllExport void ResetBuffer();
 DllExport unsigned GetTimeoutsCounter();
 DllExport void ResetTimeoutsCounter();
+DllExport const char* GetLastError();
 DllExport unsigned GetWriteIdx();
 DllExport unsigned GetReadIdx();
 

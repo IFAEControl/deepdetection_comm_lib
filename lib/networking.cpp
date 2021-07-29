@@ -5,6 +5,13 @@
 #include <optional>
 #include <sstream>
 
+#ifdef _WIN32
+#pragma once
+#include <winsock2.h>
+#else
+#include <arpa/inet.h>
+#endif
+
 #include <Poco/Net/SocketStream.h>
 #include <Poco/StreamCopier.h>
 
@@ -68,13 +75,14 @@ void DataReceiver::readerThread() {
             BaseHeaderType header;
             memcpy(&header, buf, sizeof(header));
 
-            auto bytes = header.packetsize;
+            auto bytes = ntohl(header.packetsize);
             if(header.packtype == HEADER_PACKTYPE::ERROR) {
                 _timeouts++;
 
                 char str[bytes + 1];
                 memcpy(str, buf + HEADER_BYTE_SIZE, bytes);
                 str[bytes] = '\0';
+                _last_error_msg = str;
                 logger->error("Error on asyncs: {}", static_cast<char*>(str));
 
                 // Remove buffered data
@@ -143,6 +151,10 @@ void DataReceiver::resetTimeouts() {
     _timeouts = 0;
 }
 
+std::string& DataReceiver::getLastError() {
+    return _last_error_msg;
+}
+
 int Networking::initialize(std::string ip, unsigned short port, unsigned short aport) {
     if(_data_receiver.threadRunning()) {
         logger->error("Already configured, doing nothing");
@@ -173,6 +185,10 @@ unsigned Networking::getTimeoutsCounter() const {
 
 void Networking::resetTimeoutsCounter() {
     _data_receiver.resetTimeouts();
+}
+
+std::string& Networking::getLastError() {
+    return _data_receiver.getLastError();
 }
 
 TEMPLATE_COMMAND(ReadTemperature);

@@ -23,10 +23,10 @@ using namespace cli;
 int main(int argc, char* argv[]) {
     unsigned data[14400];
     std::string ip = "172.16.17.103";
-    if(argc == 2) 
+    if(argc == 2)
         ip = argv[1];
 
-    if(InitCommunication(ip.c_str(), 32000, 32001, false) < 0)
+    if(InitCommunication(ip.c_str(), 32000, 32001, true) < 0)
         return -1;
 
 
@@ -42,34 +42,34 @@ int main(int argc, char* argv[]) {
 
     rootMenu -> Insert(
             "config", [&](std::ostream& out, int chip) {
-                unsigned ConfRegData[5]; 
+                unsigned ConfRegData[5];
                 ConfRegData[4] =(DAC2<<22)|(DAC1<<11)|DAC0;
                 ConfRegData[3] =(DAC5<<23)|(DAC4<<12)|(DAC3<<1)|(DAC2>>10);
                 ConfRegData[2] = (DACREF<<24)|(DAC5>>9);
                 ConfRegData[1] = (TIMER_REG<<30)|(GENPUR<<20)|(DACTEMP<<14)|(DACREF>>8);
                 ConfRegData[0] = (TIMERSHUT<<12)|(TIMER_REG>>2);
                 ChipRegisterWrite(ConfRegData, 1<<chip);
-                out << "done\n"; 
+                out << "done\n";
         },
-            "Config" 
+            "Config"
     );
 
     rootMenu -> Insert(
-            "start", [&](std::ostream& out, int bitmap_val) { 
+            "start", [&](std::ostream& out, int bitmap_val) {
                 AcqInfo info{10,10,10,true,true,false};
                 ACQuisitionCont(info, bitmap_val);
-                out << "done\n"; 
+                out << "done\n";
         },
-            "Start acquisition" 
+            "Start acquisition"
     );
 
     rootMenu -> Insert(
-            "start_2", [&](std::ostream& out, int bitmap_val, int frames) { 
+            "start_2", [&](std::ostream& out, int bitmap_val, int frames) {
                 AcqInfo info{1000,4,2500,false,true,false};
                 ACQuisition(info, frames, bitmap_val);
-                out << "done\n"; 
+                out << "done\n";
         },
-            "Start non continuous acquisition" 
+            "Start non continuous acquisition"
     );
 
     rootMenu -> Insert(
@@ -77,43 +77,43 @@ int main(int argc, char* argv[]) {
                 PopData(data);
                 for(int i = 0; i < 10; i++)
                     out << data[i];
-                out << "\ndone\n"; 
+                out << "\ndone\n";
         },
-            "Pop frame" 
+            "Pop frame"
     );
 
     rootMenu -> Insert(
-            "stop", [&](std::ostream& out) { 
+            "stop", [&](std::ostream& out) {
                 ACQuisitionStop();
-                out << "done\n"; 
+                out << "done\n";
         },
-            "Stop acquisition" 
+            "Stop acquisition"
     );
 
     rootMenu -> Insert(
-            "read_id", [&](std::ostream& out, int chip) { 
+            "read_id", [&](std::ostream& out, int chip) {
                 unsigned id;
                 ReadEricaID(&id, 1<<chip);
-                out << "Chip id: " << id << "\n"; 
+                out << "Chip id: " << id << "\n";
         },
-            "Read chip id" 
+            "Read chip id"
     );
 
     rootMenu -> Insert(
-            "read_temp", [&](std::ostream& out, int chip) { 
+            "read_temp", [&](std::ostream& out, int chip) {
                 unsigned temp;
                 ReadTemperature(&temp, 1<<chip);
-                out << "ReadTemperature: " << temp << "\n"; 
+                out << "ReadTemperature: " << temp << "\n";
         },
-            "Read temperature" 
+            "Read temperature"
     );
 
     rootMenu -> Insert(
-            "reset", [&](std::ostream& out) { 
+            "reset", [&](std::ostream& out) {
                 CameraReset();
-                out << "done \n"; 
+                out << "done \n";
         },
-            "Reset camera" 
+            "Reset camera"
     );
 
     rootMenu -> Insert(
@@ -133,19 +133,19 @@ int main(int argc, char* argv[]) {
     );
 
     rootMenu -> Insert(
-            "reset_ctrlr", [&](std::ostream& out) { 
+            "reset_ctrlr", [&](std::ostream& out) {
                 ControllerReset();
-                out << "done \n"; 
+                out << "done \n";
             },
-            "Reset controller" 
+            "Reset controller"
     );
 
     rootMenu -> Insert(
-            "reset_fb", [&](std::ostream& out) { 
+            "reset_fb", [&](std::ostream& out) {
                 ResetBuffer();
-                out << "done \n"; 
+                out << "done \n";
             },
-            "Reset frame buffer" 
+            "Reset frame buffer"
     );
 
     rootMenu -> Insert(
@@ -197,6 +197,13 @@ int main(int argc, char* argv[]) {
             "Init"
     );
 
+	rootMenu -> Insert(
+		"get_last_err", [&](std::ostream& out) {
+			out << GetLastError() << "\n";
+		},
+		"Get last error"
+	);
+
 
     Cli cli(std::move(rootMenu));
     CliFileSession input(cli);
@@ -205,4 +212,4 @@ int main(int argc, char* argv[]) {
 
     CloseCommunication();
 }
-    
+

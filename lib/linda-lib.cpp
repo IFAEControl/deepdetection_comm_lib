@@ -388,6 +388,10 @@ void ResetTimeoutsCounter() {
     n.resetTimeoutsCounter();
 }
 
+const char* GetLastError() {
+    return n.getLastError().c_str();
+}
+
 unsigned GetWriteIdx() {
     return fb.getWriteFrame();
 }

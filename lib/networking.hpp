@@ -34,12 +34,16 @@ public:
 
 	unsigned getTimeouts() const;
 	void resetTimeouts();
+
+	std::string& getLastError();
+
 private:
 	void readerThread();
 	int connect();
 
 	unsigned _timeouts{0};
 	bool _thread_running{false};
+	std::string _last_error_msg{};
 	std::thread _reader{};
 
 	Poco::Net::SocketAddress _sa;
@@ -55,6 +59,7 @@ public:
 	void joinThread();
 	unsigned getTimeoutsCounter() const;
 	void resetTimeoutsCounter();
+	std::string& getLastError();
 private:
 	std::string _ip{"8.8.8.8"};
 	CmdSender _cmd_sender;
