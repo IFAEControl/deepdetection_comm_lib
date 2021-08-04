@@ -75,8 +75,8 @@ void DataReceiver::readerThread() {
             BaseHeaderType header;
             memcpy(&header, buf, sizeof(header));
 
-            auto bytes = ntohl(header.packetsize);
             if(header.packtype == HEADER_PACKTYPE::ERROR) {
+                auto bytes = ntohl(header.packetsize);
                 _timeouts++;
 
                 char* str = new char[bytes + 1];
@@ -93,6 +93,7 @@ void DataReceiver::readerThread() {
                 continue;
             }
 
+            auto bytes = header.packetsize;
             auto number = header.number;
             if(old_pnum.has_value() && uint16_t(number - 1) != old_pnum) {
                 logger->warn(
