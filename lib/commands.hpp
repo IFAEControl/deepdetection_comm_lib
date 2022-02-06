@@ -164,4 +164,10 @@ public:
 	UpdateHB();
 };
 
+class ReadTouchdown : public Command {
+public: 
+    ReadTouchdown();
+    unsigned getAnswer();
+};
+
 } // end namespace CMD

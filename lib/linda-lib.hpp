@@ -36,6 +36,7 @@ DllExport int ACQuisitionStop();
 DllExport int LoadFloodNormFactors(const unsigned in[60], int chips_bitmap);
 DllExport int SetHV(unsigned counts);
 DllExport int SetTPDAC(unsigned counts);
+DllExport int ReadTouchdown(unsigned* data);
 
 // @brief Sends a heart beat to the server. It must be send with a period of 2.5 seconds
 DllExport int UpdateHB();

@@ -208,4 +208,10 @@ unsigned GetDataIRQs::getAnswer() {
 
 UpdateHB::UpdateHB() : Command("update_hb") {}
 
+ReadTouchdown::ReadTouchdown() : Command("read_touchdown") {}
+
+unsigned ReadTouchdown::getAnswer() {
+    return m.body["answer"]["val"];
+}
+
 } // end namespace CMD

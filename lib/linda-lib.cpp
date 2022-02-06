@@ -151,6 +151,19 @@ int SetTPDAC(unsigned counts) {
 #endif
 }
 
+int ReadTouchdown(unsigned* data) {
+#ifdef DUMMY
+    return 0;
+#else
+    CMD::ReadTouchdown cmd;
+    auto resp = sendCmd(cmd);
+    if(resp.first < 0) return resp.first;
+
+    *data = resp.second.value().getAnswer();
+    return resp.first;
+#endif
+}
+
 int ChipRegisterWrite(const unsigned in[5], int chips_bitmap) {
 #ifdef DUMMY
     for(int i = 0; i < 5; i++) chip_register[i] = in[i];
