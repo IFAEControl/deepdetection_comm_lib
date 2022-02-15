@@ -1,1 +1,1 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/p3lgh5fcimbdkrtb?svg=true)](https://ci.appveyor.com/project/stkw0/linda-comm-lib)
+[![Build status](https://ci.appveyor.com/api/projects/status/5w57rlanjc1tsmgb?svg=true)](https://ci.appveyor.com/project/stkw0/deepdetection-comm-lib)
