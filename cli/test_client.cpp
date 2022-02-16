@@ -41,6 +41,14 @@ int main(int argc, char* argv[]) {
     auto rootMenu = std::make_unique<Menu>("linda");
 
     rootMenu -> Insert(
+            "rtd", [&](std::ostream& out, int chip) {
+                ReadTouchdown(data);
+                out << data[0] << "done\n";
+        },
+            "Read touchdown"
+    );
+
+    rootMenu -> Insert(
             "config", [&](std::ostream& out, int chip) {
                 unsigned ConfRegData[5];
                 ConfRegData[4] =(DAC2<<22)|(DAC1<<11)|DAC0;
