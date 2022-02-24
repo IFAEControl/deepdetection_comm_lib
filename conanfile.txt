@@ -1,5 +1,5 @@
 [requires]
-Poco/1.9.3@pocoproject/stable
+poco/1.11.1
 nlohmann_json/3.9.1
 spdlog/1.8.0 
 
