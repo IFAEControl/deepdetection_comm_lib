@@ -43,7 +43,7 @@ template <typename T> T CmdSender::sendCommand(T&& c) {
     std::memcpy(&m.header, ss.str().c_str(), HEADER_BYTE_SIZE);
     if(m.header.packtype == HEADER_PACKTYPE::ERROR) {
         _socket.close();
-        throw std::runtime_error("Command error");
+        throw std::runtime_error("Can not send command");
     }
     m.body = json::parse(ss.seekg(HEADER_BYTE_SIZE));
     _socket.close();
