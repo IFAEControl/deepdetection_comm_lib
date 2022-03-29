@@ -57,14 +57,16 @@ template <typename T> std::pair<int, std::optional<T>> sendCmd(T& cmd) try {
     return {-2, {}};
 }
 
-int InitCommunication(const char* str, int sync_port, int async_port, bool start_async_thread) {
+int InitCommunication(const char* str, int sync_port, int async_port,
+                      bool start_async_thread, unsigned* data) {
 #ifdef DUMMY
     for(int i = 0; i < 5; i++) chip_register[i] = 0;
     for(int i = 0; i < 480; i++) pixel_register[i] = 0;
     return 0;
 #else
     logger->info("Connecting");
-    if(auto ret = n.initialize(str, sync_port, async_port); ret) return ret;
+    if(auto ret = n.initialize(str, sync_port, async_port, data); ret)
+        return ret;
 
     if(start_async_thread) {
         if(n.initReceiverThread() < 0) return -1;
@@ -281,7 +283,7 @@ int FullArrayReadEricaID(unsigned id[30], int chips_bitmap) {
 #endif
 }
 
-int PopData(unsigned* data) {
+int PopData() {
 #ifdef DUMMY
     for(uint32_t i = 0; i < X_SIZE * Y_SIZE; i++) {
         for(uint32_t k = 0; k < N_WORDS_PIXEL; k++) {
@@ -290,11 +292,11 @@ int PopData(unsigned* data) {
     }
     return 0;
 #else
-    return fb.moveLastFrame(data);
+    return fb.moveLastFrame();
 #endif
 }
 
-int PopDataWithTimeout(unsigned* data, unsigned timeout_ms) {
+int PopDataWithTimeout(unsigned timeout_ms) {
 #ifdef DUMMY
     for(uint32_t i = 0; i < X_SIZE * Y_SIZE; i++) {
         for(uint32_t k = 0; k < N_WORDS_PIXEL; k++) {
@@ -303,7 +305,7 @@ int PopDataWithTimeout(unsigned* data, unsigned timeout_ms) {
     }
     return 0;
 #else
-    return fb.moveLastFrame(data, timeout_ms);
+    return fb.moveLastFrame(timeout_ms);
 #endif
 }
 

@@ -6,27 +6,26 @@
 #include <mutex>
 #include <atomic>
 
-constexpr unsigned CACHE_SIZE = 33101;
+constexpr unsigned CACHE_SIZE = 1;
 
 class Frame {
 public:
-	explicit Frame(unsigned b);
+	Frame() =default;
+	explicit Frame(unsigned b, char* p);
 
 	char* get();
 	unsigned getBytes() const;
-	void copyTo(void* dest);
-	void remove();
 
 private:
 	bool _delete{false};
-	char* _mem;
 	unsigned _bytes;
+	char* _mem;
 };
 
 class FrameBuffer {
 public:
 	void addFrame(const Frame&& f);
-	int moveLastFrame(unsigned* data, unsigned ms = 0);
+	int moveLastFrame(unsigned ms = 0);
 	void cancel();
 	void reset();
 
@@ -39,7 +38,7 @@ private:
 
 	bool _cancel{false};
 
-	std::vector<Frame> _buf;
+	Frame _buf;
 	std::size_t _curr_write_frame{0};
 	std::size_t _curr_read_frame{0};
 	std::atomic_size_t _available_frames{0};

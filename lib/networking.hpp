@@ -27,7 +27,7 @@ private:
 class DataReceiver {
 public:
 	DataReceiver() =default;
-	DataReceiver(const std::string& ip, unsigned short port);
+	DataReceiver(const std::string& ip, unsigned short port, unsigned* data);
 	int initThread();
 	void joinThread();
 	bool threadRunning() const;
@@ -48,12 +48,12 @@ private:
 
 	Poco::Net::SocketAddress _sa;
     Poco::Net::DatagramSocket _dgs;
-
+	unsigned* _data;
 };
 
 class Networking {
 public:
-	int initialize(std::string ip, unsigned short port, unsigned short aport);
+	int initialize(std::string ip, unsigned short port, unsigned short aport, unsigned* data);
 	template<typename T> T sendCommand(T&& c);
 	int initReceiverThread();
 	void joinThread();

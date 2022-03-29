@@ -165,7 +165,7 @@ public:
 };
 
 class ReadTouchdown : public Command {
-public: 
+public:
     ReadTouchdown();
     unsigned getAnswer();
 };

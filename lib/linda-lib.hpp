@@ -10,7 +10,7 @@
 
 extern "C" {
 
-DllExport int InitCommunication(const char* str, int sync_port, int async_port, bool start_async_thread);
+DllExport int InitCommunication(const char* str, int sync_port, int async_port, bool start_async_thread, unsigned* data);
 DllExport void CloseCommunication();
 DllExport int CameraReset();
 DllExport int ControllerReset();
@@ -29,8 +29,8 @@ DllExport int ACQuisitionCont(AcqInfo info, int chips_bitmap);
 
 /// @brief copies last frame to provided pointer
 /// @return 0 in case of success, -1 if a cancel has been requested
-DllExport int PopData(unsigned* data);
-DllExport int PopDataWithTimeout(unsigned* data, unsigned timeout_ms);
+DllExport int PopData();
+DllExport int PopDataWithTimeout(unsigned timeout_ms);
 DllExport void CancelPopFrame();
 DllExport int ACQuisitionStop();
 DllExport int LoadFloodNormFactors(const unsigned in[60], int chips_bitmap);

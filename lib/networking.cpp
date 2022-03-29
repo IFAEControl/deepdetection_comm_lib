@@ -50,8 +50,8 @@ template <typename T> T CmdSender::sendCommand(T&& c) {
     return std::move(c);
 }
 
-DataReceiver::DataReceiver(const std::string& ip, unsigned short p)
-    : _sa{ip, p} {}
+DataReceiver::DataReceiver(const std::string& ip, unsigned short p, unsigned* data)
+    : _sa{ip, p}, _data{data} {}
 
 int DataReceiver::initThread() {
     if(connect() < 0) return -1;
@@ -101,7 +101,7 @@ void DataReceiver::readerThread() {
             }
             old_pnum = number;
 
-            Frame f(bytes);
+            Frame f(bytes, (char*)_data);
             memcpy(f.get(), buf + sizeof(header), bytes);
 
             fb.addFrame(std::move(f));
@@ -156,7 +156,8 @@ const char* DataReceiver::getLastError() {
     return _last_error_msg.c_str();
 }
 
-int Networking::initialize(std::string ip, unsigned short port, unsigned short aport) {
+int Networking::initialize(std::string ip, unsigned short port,
+                           unsigned short aport, unsigned* data) {
     if(_data_receiver.threadRunning()) {
         logger->error("Already configured, doing nothing");
         return -1;
@@ -164,7 +165,7 @@ int Networking::initialize(std::string ip, unsigned short port, unsigned short a
 
     _ip = ip;
     _cmd_sender = CmdSender(_ip, port);
-    _data_receiver = DataReceiver(_ip, aport);
+    _data_receiver = DataReceiver(_ip, aport, data);
     return 0;
 }
 
